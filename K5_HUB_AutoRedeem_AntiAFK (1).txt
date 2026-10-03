@@ -1,0 +1,127 @@
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local CodeRE = ReplicatedStorage.Framework.Systems.CodesSystem.CodeRE
+
+local CODE_COOLDOWN = 8.6
+local BUFFER = 8.5
+local REDEEM_DELAY = CODE_COOLDOWN + BUFFER
+
+local Codes = {
+    "RAGNAROK",
+    "Rujika",
+    "Aimyoungs",
+    "GRAYWOLF",
+    "Astral",
+    "Ahjughh",
+    "AAM",
+    "ARES",
+    "ARKANGHEL",
+    "ERIKSM",
+    "reiley",
+    "BERLINHERE23",
+    "Giovanni_GG",
+    "CA2",
+    "SIGURIH",
+    "MERGIXS",
+    "druscxlla",
+    "MAHAFEY",
+    "ToadPlaysGamesTTV",
+    "luknojo",
+    "Ghifa",
+    "Luthador2121",
+    "RIKUSOULS",
+    "T3nsei",
+    "Dray28",
+    "Sukunay",
+    "Maple",
+    "LALAGANG",
+    "Uzi",
+    "runekify",
+    "Zeny",
+    "HELOS",
+    "LezoCr",
+    "Fujiesane",
+    "Laplace",
+    "Nyxaria",
+    "FannTzy",
+    "Deco",
+    "dasher",
+    "Nothing",
+    "ProfGab",
+    "SUB2BLAZESTARS",
+    "Dism",
+    "SUPER MBUD",
+    "Marcell",
+    "DrekathSenpai",
+    "Darkfeniks",
+    "Sneptuno",
+    "Markbhatra",
+    "LZZ_019BEST",
+    "Bebek",
+    "NisardHelpOnlyWoman",
+    "TT_oratttt",
+    "Izumi_Senpai",
+    "Les",
+    "SEYUnever",
+    "Shan",
+    "Freca",
+    "Ryokenn",
+    "ReyPomuchi",
+    "Gryffin",
+    "DEI_Yumeko",
+    "Chrisss",
+    "tony_vt",
+    "Ryu",
+    "Clipz7112",
+    "PaPaX",
+    "Kiota2",
+    "Lulzsec",
+    "smiley",
+    "Sine",
+    "GT_HANNI",
+    "Erijero",
+    "DanoNano",
+    "WettySNK",
+    "obe",
+    "Dekday",
+    "Qyuu",
+    "Gwynne",
+    "PapiJoy",
+    "Taalonely",
+    "Darren",
+    "MADUNN",
+    "PepCalcot",
+    "Shirooo0312_IRONSOUL",
+    "Monarch",
+    "Lifauzi",
+    "TT_Mentally_ill_K.N",
+    "RaykorBR",
+    "ZARGAKSTONE",
+    "Heso",
+    "Ghelayyy",
+    "EJ(YURU)",
+    "IronReaper",
+    "Skywinter86",
+    "ALLWAONIRONSOUL",
+    "Locko_SS",
+    "MAS ACENG",
+    "IRONTRADETYCOON"
+}
+
+for index, code in ipairs(Codes) do
+    print(("[AUTO REDEEM] [%d/%d] %s"):format(
+        index,
+        #Codes,
+        code
+    ))
+
+    CodeRE:FireServer({
+        event = "usecode",
+        code = code
+    })
+
+    if index < #Codes then
+        task.wait(REDEEM_DELAY)
+    end
+end
+
+print("[AUTO REDEEM] Finished")
