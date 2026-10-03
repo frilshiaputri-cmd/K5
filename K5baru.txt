@@ -1,0 +1,825 @@
+--// K5 HUB - CODE REDEEMER
+--// UI based on K5 HUB neon design
+--// Logo: Roblox Asset ID 115820469332666
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local TweenService = game:GetService("TweenService")
+
+local Player = Players.LocalPlayer
+
+local CodeRE = ReplicatedStorage
+	.Framework
+	.Systems
+	.CodesSystem
+	.CodeRE
+
+local CODE_COOLDOWN = 8.6
+local BUFFER = 8.5
+local REDEEM_DELAY = CODE_COOLDOWN + BUFFER
+
+--==================================================
+-- CODES
+--==================================================
+
+local Codes = {
+	"RAGNAROK",
+	"Rujika",
+	"Aimyoungs",
+	"GRAYWOLF",
+	"Astral",
+	"Ahjughh",
+	"AAM",
+	"ARES",
+	"ARKANGHEL",
+	"ERIKSM",
+	"reiley",
+	"BERLINHERE23",
+	"Giovanni_GG",
+	"CA2",
+	"SIGURIH",
+	"MERGIXS",
+	"druscxlla",
+	"MAHAFEY",
+	"ToadPlaysGamesTTV",
+	"luknojo",
+	"Ghifa",
+	"Luthador2121",
+	"RIKUSOULS",
+	"T3nsei",
+	"Dray28",
+	"Sukunay",
+	"Maple",
+	"LALAGANG",
+	"Uzi",
+	"runekify",
+	"Zeny",
+	"HELOS",
+	"LezoCr",
+	"Fujiesane",
+	"Laplace",
+	"Nyxaria",
+	"FannTzy",
+	"Deco",
+	"dasher",
+	"Nothing",
+	"ProfGab",
+	"SUB2BLAZESTARS",
+	"Dism",
+	"SUPER MBUD",
+	"Marcell",
+	"DrekathSenpai",
+	"Darkfeniks",
+	"Sneptuno",
+	"Markbhatra",
+	"LZZ_019BEST",
+	"Bebek",
+	"NisardHelpOnlyWoman",
+	"TT_oratttt",
+	"Izumi_Senpai",
+	"Les",
+	"SEYUnever",
+	"Shan",
+	"Freca",
+	"Ryokenn",
+	"ReyPomuchi",
+	"Gryffin",
+	"DEI_Yumeko",
+	"Chrisss",
+	"tony_vt",
+	"Ryu",
+	"Clipz7112",
+	"PaPaX",
+	"Kiota2",
+	"Lulzsec",
+	"smiley",
+	"Sine",
+	"GT_HANNI",
+	"Erijero",
+	"DanoNano",
+	"WettySNK",
+	"obe",
+	"Dekday",
+	"Qyuu",
+	"Gwynne",
+	"PapiJoy",
+	"Taalonely",
+	"Darren",
+	"MADUNN",
+	"PepCalcot",
+	"Shirooo0312_IRONSOUL",
+	"Monarch",
+	"Lifauzi",
+	"TT_Mentally_ill_K.N",
+	"RaykorBR",
+	"ZARGAKSTONE",
+	"Heso",
+	"Ghelayyy",
+	"EJ(YURU)",
+	"IronReaper",
+	"Skywinter86",
+	"ALLWAONIRONSOUL",
+	"IRONWEEKENDGIFT26",
+	"Locko_SS",
+	"MAS ACENG",
+	"IRONTRADETYCOON"
+}
+
+--==================================================
+-- THEME
+--==================================================
+
+local GREEN = Color3.fromRGB(80, 255, 0)
+local DARK_GREEN = Color3.fromRGB(15, 70, 10)
+local BLACK = Color3.fromRGB(3, 7, 4)
+local PANEL = Color3.fromRGB(5, 18, 8)
+local WHITE = Color3.fromRGB(235, 255, 235)
+local RED = Color3.fromRGB(255, 35, 45)
+
+local function New(class, properties)
+	local obj = Instance.new(class)
+
+	for property, value in pairs(properties) do
+		obj[property] = value
+	end
+
+	return obj
+end
+
+local function Corner(parent, radius)
+	local corner = Instance.new("UICorner")
+	corner.CornerRadius = UDim.new(0, radius)
+	corner.Parent = parent
+	return corner
+end
+
+local function Stroke(parent, color, thickness, transparency)
+	local stroke = Instance.new("UIStroke")
+	stroke.Color = color
+	stroke.Thickness = thickness or 1
+	stroke.Transparency = transparency or 0
+	stroke.Parent = parent
+	return stroke
+end
+
+--==================================================
+-- GUI
+--==================================================
+
+local Gui = New("ScreenGui", {
+	Name = "K5_HUB_GUI",
+	ResetOnSpawn = false,
+	IgnoreGuiInset = true,
+	ZIndexBehavior = Enum.ZIndexBehavior.Sibling,
+	Parent = Player:WaitForChild("PlayerGui")
+})
+
+-- Main window
+local Main = New("Frame", {
+	Name = "Main",
+	Size = UDim2.fromScale(0.82, 0.82),
+	Position = UDim2.fromScale(0.09, 0.09),
+	BackgroundColor3 = BLACK,
+	BorderSizePixel = 0,
+	Parent = Gui
+})
+
+Corner(Main, 14)
+Stroke(Main, GREEN, 2)
+
+-- Glow
+local Glow = New("Frame", {
+	Name = "Glow",
+	Size = UDim2.new(1, 20, 1, 20),
+	Position = UDim2.new(0, -10, 0, -10),
+	BackgroundColor3 = GREEN,
+	BackgroundTransparency = 0.94,
+	ZIndex = 0,
+	Parent = Main
+})
+
+Corner(Glow, 18)
+
+--==================================================
+-- HEADER
+--==================================================
+
+local Header = New("Frame", {
+	Size = UDim2.new(1, 0, 0, 125),
+	BackgroundColor3 = Color3.fromRGB(4, 14, 6),
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(Header, 14)
+Stroke(Header, DARK_GREEN, 1)
+
+-- Logo
+local Logo = New("ImageLabel", {
+	Name = "K5Logo",
+	Size = UDim2.new(0, 105, 0, 105),
+	Position = UDim2.new(0, 15, 0.5, -52),
+	BackgroundTransparency = 1,
+	Image = "rbxassetid://115820469332666",
+	ScaleType = Enum.ScaleType.Fit,
+	Parent = Header
+})
+
+-- Title
+local Title = New("TextLabel", {
+	Size = UDim2.new(0, 500, 0, 45),
+	Position = UDim2.new(0, 135, 0, 22),
+	BackgroundTransparency = 1,
+	Text = "K5 HUB",
+	TextColor3 = WHITE,
+	TextSize = 38,
+	Font = Enum.Font.GothamBlack,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Header
+})
+
+local TitleGradient = Instance.new("UIGradient")
+TitleGradient.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, WHITE),
+	ColorSequenceKeypoint.new(0.55, GREEN),
+	ColorSequenceKeypoint.new(1, Color3.fromRGB(120, 255, 40))
+})
+TitleGradient.Parent = Title
+
+local Subtitle = New("TextLabel", {
+	Size = UDim2.new(0, 500, 0, 35),
+	Position = UDim2.new(0, 138, 0, 65),
+	BackgroundTransparency = 1,
+	Text = "CODE REDEEMER",
+	TextColor3 = GREEN,
+	TextSize = 25,
+	Font = Enum.Font.GothamBold,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Header
+})
+
+local Tagline = New("TextLabel", {
+	Size = UDim2.new(0, 500, 0, 20),
+	Position = UDim2.new(0, 140, 0, 96),
+	BackgroundTransparency = 1,
+	Text = "FAST   /   SAFE   /   AUTO REDEEM",
+	TextColor3 = Color3.fromRGB(170, 210, 170),
+	TextSize = 11,
+	Font = Enum.Font.GothamMedium,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Header
+})
+
+-- Window buttons
+local Close = New("TextButton", {
+	Size = UDim2.new(0, 45, 0, 32),
+	Position = UDim2.new(1, -55, 0, 10),
+	BackgroundColor3 = Color3.fromRGB(20, 40, 20),
+	BorderSizePixel = 0,
+	Text = "×",
+	TextColor3 = GREEN,
+	TextSize = 26,
+	Font = Enum.Font.GothamBold,
+	Parent = Header
+})
+
+Corner(Close, 8)
+
+Close.MouseButton1Click:Connect(function()
+	Gui:Destroy()
+end)
+
+--==================================================
+-- STATS
+--==================================================
+
+local Stats = New("Frame", {
+	Size = UDim2.new(0, 270, 0, 105),
+	Position = UDim2.new(1, -285, 0, 140),
+	BackgroundColor3 = PANEL,
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(Stats, 10)
+Stroke(Stats, DARK_GREEN, 1)
+
+local function StatLine(y, label, value)
+	local l = New("TextLabel", {
+		Size = UDim2.new(0.6, 0, 0, 25),
+		Position = UDim2.new(0, 15, 0, y),
+		BackgroundTransparency = 1,
+		Text = label,
+		TextColor3 = WHITE,
+		TextSize = 14,
+		Font = Enum.Font.GothamMedium,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		Parent = Stats
+	})
+
+	local v = New("TextLabel", {
+		Size = UDim2.new(0.35, 0, 0, 25),
+		Position = UDim2.new(0.62, 0, 0, y),
+		BackgroundTransparency = 1,
+		Text = value,
+		TextColor3 = GREEN,
+		TextSize = 15,
+		Font = Enum.Font.GothamBold,
+		TextXAlignment = Enum.TextXAlignment.Right,
+		Parent = Stats
+	})
+
+	return v
+end
+
+local TotalValue = StatLine(10, "Total Codes", tostring(#Codes))
+local RedeemedValue = StatLine(40, "Redeemed", "0")
+local StatusValue = StatLine(70, "Status", "READY")
+
+--==================================================
+-- PROGRESS
+--==================================================
+
+local ProgressFrame = New("Frame", {
+	Size = UDim2.new(1, -320, 0, 48),
+	Position = UDim2.new(0, 20, 0, 140),
+	BackgroundColor3 = PANEL,
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(ProgressFrame, 10)
+Stroke(ProgressFrame, DARK_GREEN, 1)
+
+local ProgressText = New("TextLabel", {
+	Size = UDim2.new(0, 80, 1, 0),
+	Position = UDim2.new(0, 12, 0, 0),
+	BackgroundTransparency = 1,
+	Text = "PROGRESS",
+	TextColor3 = WHITE,
+	TextSize = 13,
+	Font = Enum.Font.GothamBold,
+	Parent = ProgressFrame
+})
+
+local ProgressBack = New("Frame", {
+	Size = UDim2.new(1, -180, 0, 16),
+	Position = UDim2.new(0, 95, 0.5, -8),
+	BackgroundColor3 = Color3.fromRGB(2, 8, 3),
+	BorderSizePixel = 0,
+	Parent = ProgressFrame
+})
+
+Corner(ProgressBack, 8)
+Stroke(ProgressBack, DARK_GREEN, 1)
+
+local ProgressBar = New("Frame", {
+	Size = UDim2.new(0, 0, 1, 0),
+	BackgroundColor3 = GREEN,
+	BorderSizePixel = 0,
+	Parent = ProgressBack
+})
+
+Corner(ProgressBar, 8)
+
+local ProgressValue = New("TextLabel", {
+	Size = UDim2.new(0, 70, 1, 0),
+	Position = UDim2.new(1, -75, 0, 0),
+	BackgroundTransparency = 1,
+	Text = "0 / " .. #Codes,
+	TextColor3 = GREEN,
+	TextSize = 13,
+	Font = Enum.Font.GothamBold,
+	TextXAlignment = Enum.TextXAlignment.Right,
+	Parent = ProgressFrame
+})
+
+--==================================================
+-- CODE TABLE
+--==================================================
+
+local Table = New("Frame", {
+	Size = UDim2.new(1, -320, 1, -270),
+	Position = UDim2.new(0, 20, 0, 200),
+	BackgroundColor3 = Color3.fromRGB(3, 12, 6),
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(Table, 10)
+Stroke(Table, GREEN, 1)
+
+-- Table header
+local TableHeader = New("Frame", {
+	Size = UDim2.new(1, -10, 0, 38),
+	Position = UDim2.new(0, 5, 0, 5),
+	BackgroundColor3 = Color3.fromRGB(50, 210, 0),
+	BorderSizePixel = 0,
+	Parent = Table
+})
+
+Corner(TableHeader, 7)
+
+local function HeaderText(text, pos, size)
+	New("TextLabel", {
+		Size = size,
+		Position = pos,
+		BackgroundTransparency = 1,
+		Text = text,
+		TextColor3 = Color3.fromRGB(0, 15, 0),
+		TextSize = 13,
+		Font = Enum.Font.GothamBlack,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		Parent = TableHeader
+	})
+end
+
+HeaderText("#", UDim2.new(0, 12, 0, 0), UDim2.new(0, 40, 1, 0))
+HeaderText("CODE", UDim2.new(0, 55, 0, 0), UDim2.new(0.5, 0, 1, 0))
+HeaderText("STATUS", UDim2.new(0.62, 0, 0, 0), UDim2.new(0.2, 0, 1, 0))
+HeaderText("ACTION", UDim2.new(0.87, 0, 0, 0), UDim2.new(0.13, 0, 1, 0))
+
+-- Scrolling table
+local Scroll = New("ScrollingFrame", {
+	Size = UDim2.new(1, -10, 1, -53),
+	Position = UDim2.new(0, 5, 0, 48),
+	BackgroundTransparency = 1,
+	BorderSizePixel = 0,
+	ScrollBarThickness = 5,
+	ScrollBarImageColor3 = GREEN,
+	CanvasSize = UDim2.new(0, 0, 0, #Codes * 31),
+	Parent = Table
+})
+
+local List = Instance.new("UIListLayout")
+List.Padding = UDim.new(0, 2)
+List.SortOrder = Enum.SortOrder.LayoutOrder
+List.Parent = Scroll
+
+local Rows = {}
+
+local function CreateRow(index, code)
+	local Row = New("Frame", {
+		Name = "Code_" .. index,
+		Size = UDim2.new(1, -8, 0, 29),
+		BackgroundColor3 = index % 2 == 0
+			and Color3.fromRGB(4, 20, 9)
+			or Color3.fromRGB(3, 14, 7),
+		BorderSizePixel = 0,
+		LayoutOrder = index,
+		Parent = Scroll
+	})
+
+	Corner(Row, 4)
+
+	local Number = New("TextLabel", {
+		Size = UDim2.new(0, 40, 1, 0),
+		Position = UDim2.new(0, 8, 0, 0),
+		BackgroundTransparency = 1,
+		Text = tostring(index),
+		TextColor3 = Color3.fromRGB(150, 190, 150),
+		TextSize = 12,
+		Font = Enum.Font.GothamMedium,
+		Parent = Row
+	})
+
+	local CodeLabel = New("TextLabel", {
+		Size = UDim2.new(0.54, 0, 1, 0),
+		Position = UDim2.new(0, 55, 0, 0),
+		BackgroundTransparency = 1,
+		Text = code,
+		TextColor3 = WHITE,
+		TextSize = 12,
+		Font = Enum.Font.GothamMedium,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		TextTruncate = Enum.TextTruncate.AtEnd,
+		Parent = Row
+	})
+
+	local Status = New("TextLabel", {
+		Size = UDim2.new(0.2, 0, 1, 0),
+		Position = UDim2.new(0.62, 0, 0, 0),
+		BackgroundTransparency = 1,
+		Text = "● PENDING",
+		TextColor3 = GREEN,
+		TextSize = 11,
+		Font = Enum.Font.GothamMedium,
+		TextXAlignment = Enum.TextXAlignment.Left,
+		Parent = Row
+	})
+
+	local Use = New("TextButton", {
+		Size = UDim2.new(0, 65, 0, 22),
+		Position = UDim2.new(1, -75, 0.5, -11),
+		BackgroundColor3 = Color3.fromRGB(5, 35, 8),
+		BorderSizePixel = 0,
+		Text = "USE",
+		TextColor3 = GREEN,
+		TextSize = 10,
+		Font = Enum.Font.GothamBold,
+		Parent = Row
+	})
+
+	Corner(Use, 6)
+	Stroke(Use, GREEN, 1)
+
+	Rows[index] = {
+		Row = Row,
+		Status = Status,
+		Use = Use
+	}
+
+	return Rows[index]
+end
+
+for i, code in ipairs(Codes) do
+	CreateRow(i, code)
+end
+
+--==================================================
+-- RIGHT PANEL
+--==================================================
+
+local Info = New("Frame", {
+	Size = UDim2.new(0, 270, 0, 205),
+	Position = UDim2.new(1, -285, 0, 255),
+	BackgroundColor3 = PANEL,
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(Info, 10)
+Stroke(Info, DARK_GREEN, 1)
+
+local InfoTitle = New("TextLabel", {
+	Size = UDim2.new(1, -25, 0, 35),
+	Position = UDim2.new(0, 15, 0, 10),
+	BackgroundTransparency = 1,
+	Text = "K5 HUB",
+	TextColor3 = GREEN,
+	TextSize = 21,
+	Font = Enum.Font.GothamBlack,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Info
+})
+
+local InfoSub = New("TextLabel", {
+	Size = UDim2.new(1, -25, 0, 25),
+	Position = UDim2.new(0, 15, 0, 42),
+	BackgroundTransparency = 1,
+	Text = "CODE REDEEMER",
+	TextColor3 = WHITE,
+	TextSize = 14,
+	Font = Enum.Font.GothamBold,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Info
+})
+
+local InfoText = New("TextLabel", {
+	Size = UDim2.new(1, -30, 0, 115),
+	Position = UDim2.new(0, 15, 0, 75),
+	BackgroundTransparency = 1,
+	Text =
+		"⚡  " .. #Codes .. " Codes\n\n" ..
+		"🛡  Auto Redeem\n\n" ..
+		"◷  Cooldown: 8.6s\n\n" ..
+		"◉  Buffer: 8.5s",
+	TextColor3 = Color3.fromRGB(190, 225, 190),
+	TextSize = 13,
+	Font = Enum.Font.GothamMedium,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	TextYAlignment = Enum.TextYAlignment.Top,
+	Parent = Info
+})
+
+--==================================================
+-- SETTINGS
+--==================================================
+
+local Settings = New("Frame", {
+	Size = UDim2.new(0, 270, 0, 110),
+	Position = UDim2.new(1, -285, 0, 470),
+	BackgroundColor3 = PANEL,
+	BorderSizePixel = 0,
+	Parent = Main
+})
+
+Corner(Settings, 10)
+Stroke(Settings, DARK_GREEN, 1)
+
+New("TextLabel", {
+	Size = UDim2.new(1, -20, 0, 28),
+	Position = UDim2.new(0, 10, 0, 7),
+	BackgroundTransparency = 1,
+	Text = "⚙  REDEEM SETTINGS",
+	TextColor3 = GREEN,
+	TextSize = 14,
+	Font = Enum.Font.GothamBold,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Settings
+})
+
+New("TextLabel", {
+	Size = UDim2.new(1, -20, 0, 22),
+	Position = UDim2.new(0, 10, 0, 37),
+	BackgroundTransparency = 1,
+	Text = "Cooldown                         8.6s",
+	TextColor3 = WHITE,
+	TextSize = 12,
+	Font = Enum.Font.GothamMedium,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Settings
+})
+
+New("TextLabel", {
+	Size = UDim2.new(1, -20, 0, 22),
+	Position = UDim2.new(0, 10, 0, 60),
+	BackgroundTransparency = 1,
+	Text = "Buffer                             8.5s",
+	TextColor3 = WHITE,
+	TextSize = 12,
+	Font = Enum.Font.GothamMedium,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Settings
+})
+
+New("TextLabel", {
+	Size = UDim2.new(1, -20, 0, 22),
+	Position = UDim2.new(0, 10, 0, 83),
+	BackgroundTransparency = 1,
+	Text = "Total Delay                    17.1s",
+	TextColor3 = GREEN,
+	TextSize = 12,
+	Font = Enum.Font.GothamBold,
+	TextXAlignment = Enum.TextXAlignment.Left,
+	Parent = Settings
+})
+
+--==================================================
+-- BUTTONS
+--==================================================
+
+local RedeemAll = New("TextButton", {
+	Size = UDim2.new(0, 270, 0, 55),
+	Position = UDim2.new(1, -285, 1, -120),
+	BackgroundColor3 = Color3.fromRGB(30, 100, 10),
+	BorderSizePixel = 0,
+	Text = "▶   REDEEM ALL",
+	TextColor3 = WHITE,
+	TextSize = 17,
+	Font = Enum.Font.GothamBlack,
+	Parent = Main
+})
+
+Corner(RedeemAll, 10)
+Stroke(RedeemAll, GREEN, 2)
+
+local Stop = New("TextButton", {
+	Size = UDim2.new(0, 270, 0, 48),
+	Position = UDim2.new(1, -285, 1, -60),
+	BackgroundColor3 = Color3.fromRGB(90, 5, 10),
+	BorderSizePixel = 0,
+	Text = "■   STOP",
+	TextColor3 = Color3.fromRGB(255, 100, 100),
+	TextSize = 15,
+	Font = Enum.Font.GothamBlack,
+	Parent = Main
+})
+
+Corner(Stop, 10)
+Stroke(Stop, RED, 2)
+
+--==================================================
+-- REDEEM SYSTEM
+--==================================================
+
+local Running = false
+local Redeemed = 0
+
+local function SetStatus(index, status, color)
+	if Rows[index] then
+		Rows[index].Status.Text = "● " .. status
+		Rows[index].Status.TextColor3 = color
+	end
+end
+
+local function UpdateProgress(index)
+	local percent = index / #Codes
+
+	TweenService:Create(
+		ProgressBar,
+		TweenInfo.new(0.25, Enum.EasingStyle.Quad),
+		{
+			Size = UDim2.new(percent, 0, 1, 0)
+		}
+	):Play()
+
+	ProgressValue.Text = index .. " / " .. #Codes
+	RedeemedValue.Text = tostring(Redeemed)
+end
+
+local function RedeemCode(index)
+	local code = Codes[index]
+
+	SetStatus(index, "REDEEMING", Color3.fromRGB(255, 220, 50))
+
+	local success = pcall(function()
+		CodeRE:FireServer({
+			event = "usecode",
+			code = code
+		})
+	end)
+
+	if success then
+		Redeemed += 1
+		SetStatus(index, "SENT", GREEN)
+	else
+		SetStatus(index, "ERROR", RED)
+	end
+
+	UpdateProgress(index)
+end
+
+-- Individual USE buttons
+for index, rowData in pairs(Rows) do
+	rowData.Use.MouseButton1Click:Connect(function()
+		if Running then
+			return
+		end
+
+		RedeemCode(index)
+	end)
+end
+
+-- Redeem all
+RedeemAll.MouseButton1Click:Connect(function()
+	if Running then
+		return
+	end
+
+	Running = true
+	StatusValue.Text = "RUNNING"
+	StatusValue.TextColor3 = Color3.fromRGB(255, 220, 50)
+
+	RedeemAll.Text = "⏳   RUNNING..."
+
+	task.spawn(function()
+		for index = 1, #Codes do
+			if not Running then
+				break
+			end
+
+			print(("[AUTO REDEEM] [%d/%d] %s"):format(
+				index,
+				#Codes,
+				Codes[index]
+			))
+
+			RedeemCode(index)
+
+			if index < #Codes and Running then
+				task.wait(REDEEM_DELAY)
+			end
+		end
+
+		if Running then
+			StatusValue.Text = "FINISHED"
+			StatusValue.TextColor3 = GREEN
+			RedeemAll.Text = "✓   FINISHED"
+		else
+			StatusValue.Text = "STOPPED"
+			StatusValue.TextColor3 = RED
+			RedeemAll.Text = "▶   REDEEM ALL"
+		end
+
+		Running = false
+	end)
+end)
+
+-- Stop
+Stop.MouseButton1Click:Connect(function()
+	if Running then
+		Running = false
+		StatusValue.Text = "STOPPING..."
+		StatusValue.TextColor3 = RED
+		RedeemAll.Text = "▶   REDEEM ALL"
+	end
+end)
+
+--==================================================
+-- FOOTER
+--==================================================
+
+New("TextLabel", {
+	Size = UDim2.new(1, -40, 0, 25),
+	Position = UDim2.new(0, 20, 1, -30),
+	BackgroundTransparency = 1,
+	Text = "K5 HUB  —  MORE POWER, MORE WINS",
+	TextColor3 = Color3.fromRGB(100, 180, 100),
+	TextSize = 10,
+	Font = Enum.Font.GothamBold,
+	Parent = Main
+})
+
+print("[K5 HUB] UI Loaded")
+print("[K5 HUB] Total Codes:", #Codes)
