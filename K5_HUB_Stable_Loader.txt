@@ -4,11 +4,11 @@
 -- Cukup ganti isi file K5-HUB di URL raw yang sama.
 --========================================================--
 
-local K5_HUB_RAW_URL = "PASTE_RAW_URL_K5_HUB_DI_SINI"
+local K5_HUB_RAW_URL = "https://raw.githubusercontent.com/frilshiaputri-cmd/K5/refs/heads/main/K5_HUB_AntiLag_Max_LogoUpdated.txt"
 
 if type(K5_HUB_RAW_URL) ~= "string"
     or K5_HUB_RAW_URL == ""
-    or K5_HUB_RAW_URL == "PASTE_RAW_URL_K5_HUB_DI_SINI" then
+    or K5_HUB_RAW_URL == "https://raw.githubusercontent.com/frilshiaputri-cmd/K5/refs/heads/main/K5_HUB_AntiLag_Max_LogoUpdated.txt" then
     warn("[K5 HUB Loader] RAW URL belum diatur.")
     return
 end
