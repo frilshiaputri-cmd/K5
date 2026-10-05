@@ -24,8 +24,8 @@ local CodeRE = ReplicatedStorage
 local LOGO_ID = "rbxassetid://115820469332666"
 -- Logo asset ID: 115820469332666
 
-local CODE_COOLDOWN = 8.6
-local BUFFER = 8.5
+local CODE_COOLDOWN = 8.1
+local BUFFER = 8.0
 local REDEEM_DELAY = CODE_COOLDOWN + BUFFER
 
 --========================================================--
