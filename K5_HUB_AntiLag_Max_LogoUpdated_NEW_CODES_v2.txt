@@ -1,0 +1,1018 @@
+--========================================================--
+--                  K5 HUB - COMPACT UI                  --
+--========================================================--
+
+local Players = game:GetService("Players")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local VirtualInputManager = game:GetService("VirtualInputManager")
+
+local Player = Players.LocalPlayer
+
+local CodeRE = ReplicatedStorage
+	.Framework
+	.Systems
+	.CodesSystem
+	.CodeRE
+
+--========================================================--
+-- SETTINGS
+--========================================================--
+
+local LOGO_ID = "rbxassetid://115820469332666"
+-- Logo asset ID: 115820469332666
+
+local CODE_COOLDOWN = 8.6
+local BUFFER = 8.5
+local REDEEM_DELAY = CODE_COOLDOWN + BUFFER
+
+--========================================================--
+-- CODES
+--========================================================--
+
+local Codes = {
+	"RAGNAROK",
+	"IRONSOULBIGUPDATE",
+	"runekify",
+	"Dray28",
+	"RIKUSOULS",
+	"Ahjughh",
+	"T3nsei",
+	"Ghifa",
+	"Sukunay",
+	"MERGIXS",
+	"SIGURIH",
+	"CA2",
+	"Lulzsec",
+	"druscxlla",
+	"MAHAFEY",
+	"LALAGANG",
+	"Luthador2121",
+	"AAM",
+	"ToadPlaysGamesTTV",
+	"Uzi",
+	"TT_Mentally_ill_K.N",
+	"luknojo",
+	"Zeny",
+	"Maple",
+	"Fujiesane",
+	"VeeruChan",
+	"HELOS",
+	"LezoCr",
+	"ARES",
+	"Laplace",
+	"Deco",
+	"dasher",
+	"Nyxaria",
+	"ProfGab",
+	"SUB2BLAZESTARS",
+	"Nothing",
+	"Dism",
+	"FannTzy",
+	"Darkfeniks",
+	"Sneptuno",
+	"SUPER MBUD",
+	"Marcell",
+	"Markbhatra",
+	"DrekathSenpai",
+	"smiley",
+	"Sine",
+	"GT_HANNI",
+	"Erijero",
+	"DanoNano",
+	"WettySNK",
+	"obe",
+	"Dekday",
+	"Qyuu",
+	"Gwynne",
+	"PapiJoy",
+	"Taalonely",
+	"Darren",
+	"MADUNN",
+	"Clipz7112",
+	"omjiwa",
+	"PaPaX",
+	"Ryu",
+	"DEI_Yumeko",
+	"Chrisss",
+	"Gryffin",
+	"ARKANGHEL",
+	"tony_vt",
+	"Ryokenn",
+	"ReyPomuchi",
+	"Freca",
+	"Shan",
+	"Bebek",
+	"Les",
+	"SEYUnever",
+	"Izumi_Senpai",
+	"Staysmoovey",
+	"NisardHelpOnlyWoman",
+	"Kiota2",
+	"LZZ_019BEST",
+	"PepCalcot",
+	"Astral",
+	"Lifauzi",
+	"Shirooo0312_IRONSOUL",
+	"Ewaa",
+	"FRanime_OFFICIEL",
+	"WerNate",
+	"Ascart",
+	"Sweetiee24",
+	"Monarch",
+	"Aetherix",
+	"SUB2MULTIST789",
+	"RENZEI100",
+	"Skywinter86",
+	"Heso",
+	"Ghelayyy",
+	"Heartguard",
+	"ZARGAKSTONE",
+	"RaykorBR",
+	"EJ(YURU)",
+	"Rujika",
+	"Giovanni_GG",
+	"GRAYWOLF",
+	"SUB_TO_ITS_HUNTER",
+	"Aimyougs"
+}
+
+--========================================================--
+-- COLORS
+--========================================================--
+
+local GREEN = Color3.fromRGB(90, 255, 30)
+local GREEN2 = Color3.fromRGB(35, 150, 20)
+
+local BACKGROUND = Color3.fromRGB(17, 20, 19)
+local PANEL = Color3.fromRGB(23, 27, 26)
+local PANEL2 = Color3.fromRGB(28, 33, 31)
+
+local WHITE = Color3.fromRGB(235, 240, 235)
+local GRAY = Color3.fromRGB(145, 155, 150)
+
+--========================================================--
+-- GUI
+--========================================================--
+
+local Gui = Instance.new("ScreenGui")
+Gui.Name = "K5HubCompact"
+Gui.ResetOnSpawn = false
+Gui.IgnoreGuiInset = true
+Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+Gui.Parent = Player:WaitForChild("PlayerGui")
+
+--========================================================--
+-- DRAG FUNCTION
+--========================================================--
+
+local function MakeDraggable(Object)
+
+	local dragging = false
+	local dragStart
+	local startPosition
+
+	Object.InputBegan:Connect(function(input)
+
+		if input.UserInputType == Enum.UserInputType.MouseButton1
+			or input.UserInputType == Enum.UserInputType.Touch then
+
+			dragging = true
+			dragStart = input.Position
+			startPosition = Object.Position
+
+			input.Changed:Connect(function()
+
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+
+			end)
+
+		end
+
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+
+		if not dragging then
+			return
+		end
+
+		if input.UserInputType ~= Enum.UserInputType.MouseMovement
+			and input.UserInputType ~= Enum.UserInputType.Touch then
+			return
+		end
+
+		local delta = input.Position - dragStart
+
+		Object.Position = UDim2.new(
+			startPosition.X.Scale,
+			startPosition.X.Offset + delta.X,
+			startPosition.Y.Scale,
+			startPosition.Y.Offset + delta.Y
+		)
+
+	end)
+
+end
+
+--========================================================--
+-- LOGO BUTTON
+--========================================================--
+
+local LogoButton = Instance.new("ImageButton")
+LogoButton.Name = "K5Logo"
+LogoButton.Size = UDim2.fromOffset(58, 58)
+LogoButton.Position = UDim2.new(0, 25, 0.5, -29)
+LogoButton.BackgroundColor3 = Color3.fromRGB(8, 12, 9)
+LogoButton.BorderSizePixel = 0
+LogoButton.Image = LOGO_ID
+LogoButton.ImageTransparency = 0
+LogoButton.ScaleType = Enum.ScaleType.Fit
+LogoButton.Visible = false
+LogoButton.AutoButtonColor = false
+LogoButton.Parent = Gui
+
+local LogoCorner = Instance.new("UICorner")
+LogoCorner.CornerRadius = UDim.new(1, 0)
+LogoCorner.Parent = LogoButton
+
+local LogoStroke = Instance.new("UIStroke")
+LogoStroke.Color = GREEN
+LogoStroke.Thickness = 2
+LogoStroke.Parent = LogoButton
+
+MakeDraggable(LogoButton)
+
+--========================================================--
+-- MAIN WINDOW
+--========================================================--
+
+local Main = Instance.new("Frame")
+Main.Name = "Main"
+Main.Size = UDim2.fromOffset(350, 330)
+Main.Position = UDim2.new(0.5, -175, 0.5, -165)
+Main.BackgroundColor3 = BACKGROUND
+Main.BorderSizePixel = 0
+Main.Parent = Gui
+
+local MainCorner = Instance.new("UICorner")
+MainCorner.CornerRadius = UDim.new(0, 9)
+MainCorner.Parent = Main
+
+local MainStroke = Instance.new("UIStroke")
+MainStroke.Color = Color3.fromRGB(55, 70, 60)
+MainStroke.Thickness = 1
+MainStroke.Parent = Main
+
+MakeDraggable(Main)
+
+--========================================================--
+-- HEADER
+--========================================================--
+
+local Header = Instance.new("Frame")
+Header.Size = UDim2.new(1, 0, 0, 53)
+Header.BackgroundColor3 = PANEL
+Header.BorderSizePixel = 0
+Header.Parent = Main
+
+local HeaderCorner = Instance.new("UICorner")
+HeaderCorner.CornerRadius = UDim.new(0, 9)
+HeaderCorner.Parent = Header
+
+-- small logo
+local HeaderLogo = Instance.new("ImageLabel")
+HeaderLogo.Size = UDim2.fromOffset(34, 34)
+HeaderLogo.Position = UDim2.fromOffset(10, 9)
+HeaderLogo.BackgroundTransparency = 1
+HeaderLogo.Image = LOGO_ID
+HeaderLogo.ImageTransparency = 0
+HeaderLogo.ScaleType = Enum.ScaleType.Fit
+HeaderLogo.Parent = Header
+
+-- title
+local Title = Instance.new("TextLabel")
+Title.Size = UDim2.new(1, -100, 0, 22)
+Title.Position = UDim2.fromOffset(52, 7)
+Title.BackgroundTransparency = 1
+Title.Text = "K5 HUB"
+Title.TextColor3 = WHITE
+Title.TextSize = 17
+Title.Font = Enum.Font.GothamBold
+Title.TextXAlignment = Enum.TextXAlignment.Left
+Title.Parent = Header
+
+local SubTitle = Instance.new("TextLabel")
+SubTitle.Size = UDim2.new(1, -100, 0, 17)
+SubTitle.Position = UDim2.fromOffset(53, 28)
+SubTitle.BackgroundTransparency = 1
+SubTitle.Text = "CODE REDEEMER"
+SubTitle.TextColor3 = GREEN
+SubTitle.TextSize = 10
+SubTitle.Font = Enum.Font.GothamMedium
+SubTitle.TextXAlignment = Enum.TextXAlignment.Left
+SubTitle.Parent = Header
+
+-- close button
+local Close = Instance.new("TextButton")
+Close.Size = UDim2.fromOffset(30, 30)
+Close.Position = UDim2.new(1, -38, 0, 11)
+Close.BackgroundTransparency = 1
+Close.Text = "×"
+Close.TextColor3 = GRAY
+Close.TextSize = 22
+Close.Font = Enum.Font.GothamMedium
+Close.Parent = Header
+
+--========================================================--
+-- CONTENT
+--========================================================--
+
+local Content = Instance.new("Frame")
+Content.Size = UDim2.new(1, -20, 1, -63)
+Content.Position = UDim2.fromOffset(10, 58)
+Content.BackgroundTransparency = 1
+Content.Parent = Main
+
+--========================================================--
+-- AUTO REDEEM
+--========================================================--
+
+local AutoFrame = Instance.new("Frame")
+AutoFrame.Size = UDim2.new(1, 0, 0, 48)
+AutoFrame.BackgroundColor3 = PANEL2
+AutoFrame.BorderSizePixel = 0
+AutoFrame.Parent = Content
+
+local AutoCorner = Instance.new("UICorner")
+AutoCorner.CornerRadius = UDim.new(0, 7)
+AutoCorner.Parent = AutoFrame
+
+local AutoTitle = Instance.new("TextLabel")
+AutoTitle.Size = UDim2.new(1, -80, 0, 22)
+AutoTitle.Position = UDim2.fromOffset(12, 5)
+AutoTitle.BackgroundTransparency = 1
+AutoTitle.Text = "Auto Redeem"
+AutoTitle.TextColor3 = WHITE
+AutoTitle.TextSize = 13
+AutoTitle.Font = Enum.Font.GothamMedium
+AutoTitle.TextXAlignment = Enum.TextXAlignment.Left
+AutoTitle.Parent = AutoFrame
+
+local AutoDesc = Instance.new("TextLabel")
+AutoDesc.Size = UDim2.new(1, -80, 0, 15)
+AutoDesc.Position = UDim2.fromOffset(12, 26)
+AutoDesc.BackgroundTransparency = 1
+AutoDesc.Text = "Automatically redeem all codes"
+AutoDesc.TextColor3 = GRAY
+AutoDesc.TextSize = 9
+AutoDesc.Font = Enum.Font.Gotham
+AutoDesc.TextXAlignment = Enum.TextXAlignment.Left
+AutoDesc.Parent = AutoFrame
+
+-- toggle
+local Toggle = Instance.new("TextButton")
+Toggle.Size = UDim2.fromOffset(48, 25)
+Toggle.Position = UDim2.new(1, -60, 0.5, -12)
+Toggle.BackgroundColor3 = Color3.fromRGB(55, 60, 57)
+Toggle.BorderSizePixel = 0
+Toggle.Text = ""
+Toggle.Parent = AutoFrame
+
+local ToggleCorner = Instance.new("UICorner")
+ToggleCorner.CornerRadius = UDim.new(1, 0)
+ToggleCorner.Parent = Toggle
+
+local ToggleCircle = Instance.new("Frame")
+ToggleCircle.Size = UDim2.fromOffset(19, 19)
+ToggleCircle.Position = UDim2.fromOffset(3, 3)
+ToggleCircle.BackgroundColor3 = WHITE
+ToggleCircle.BorderSizePixel = 0
+ToggleCircle.Parent = Toggle
+
+local ToggleCircleCorner = Instance.new("UICorner")
+ToggleCircleCorner.CornerRadius = UDim.new(1, 0)
+ToggleCircleCorner.Parent = ToggleCircle
+
+--========================================================--
+-- ANTI AFK
+--========================================================--
+
+local AntiAFKFrame = Instance.new("Frame")
+AntiAFKFrame.Size = UDim2.new(1, 0, 0, 48)
+AntiAFKFrame.Position = UDim2.fromOffset(0, 54)
+AntiAFKFrame.BackgroundColor3 = PANEL2
+AntiAFKFrame.BorderSizePixel = 0
+AntiAFKFrame.Parent = Content
+
+local AntiAFKCorner = Instance.new("UICorner")
+AntiAFKCorner.CornerRadius = UDim.new(0, 7)
+AntiAFKCorner.Parent = AntiAFKFrame
+
+local AntiAFKTitle = Instance.new("TextLabel")
+AntiAFKTitle.Size = UDim2.new(1, -80, 0, 22)
+AntiAFKTitle.Position = UDim2.fromOffset(12, 5)
+AntiAFKTitle.BackgroundTransparency = 1
+AntiAFKTitle.Text = "Anti AFK"
+AntiAFKTitle.TextColor3 = WHITE
+AntiAFKTitle.TextSize = 13
+AntiAFKTitle.Font = Enum.Font.GothamMedium
+AntiAFKTitle.TextXAlignment = Enum.TextXAlignment.Left
+AntiAFKTitle.Parent = AntiAFKFrame
+
+local AntiAFKDesc = Instance.new("TextLabel")
+AntiAFKDesc.Size = UDim2.new(1, -80, 0, 15)
+AntiAFKDesc.Position = UDim2.fromOffset(12, 26)
+AntiAFKDesc.BackgroundTransparency = 1
+AntiAFKDesc.Text = "Klik Attack otomatis setiap 60 detik"
+AntiAFKDesc.TextColor3 = GRAY
+AntiAFKDesc.TextSize = 9
+AntiAFKDesc.Font = Enum.Font.Gotham
+AntiAFKDesc.TextXAlignment = Enum.TextXAlignment.Left
+AntiAFKDesc.Parent = AntiAFKFrame
+
+local AntiAFKToggle = Instance.new("TextButton")
+AntiAFKToggle.Size = UDim2.fromOffset(48, 25)
+AntiAFKToggle.Position = UDim2.new(1, -60, 0.5, -12)
+AntiAFKToggle.BackgroundColor3 = Color3.fromRGB(55, 60, 57)
+AntiAFKToggle.BorderSizePixel = 0
+AntiAFKToggle.Text = ""
+AntiAFKToggle.Parent = AntiAFKFrame
+
+local AntiAFKToggleCorner = Instance.new("UICorner")
+AntiAFKToggleCorner.CornerRadius = UDim.new(1, 0)
+AntiAFKToggleCorner.Parent = AntiAFKToggle
+
+local AntiAFKCircle = Instance.new("Frame")
+AntiAFKCircle.Size = UDim2.fromOffset(19, 19)
+AntiAFKCircle.Position = UDim2.fromOffset(3, 3)
+AntiAFKCircle.BackgroundColor3 = WHITE
+AntiAFKCircle.BorderSizePixel = 0
+AntiAFKCircle.Parent = AntiAFKToggle
+
+local AntiAFKCircleCorner = Instance.new("UICorner")
+AntiAFKCircleCorner.CornerRadius = UDim.new(1, 0)
+AntiAFKCircleCorner.Parent = AntiAFKCircle
+
+--========================================================--
+-- ANTI LAG
+--========================================================--
+
+local AntiLagFrame = Instance.new("Frame")
+AntiLagFrame.Size = UDim2.new(1, 0, 0, 48)
+AntiLagFrame.Position = UDim2.fromOffset(0, 108)
+AntiLagFrame.BackgroundColor3 = PANEL2
+AntiLagFrame.BorderSizePixel = 0
+AntiLagFrame.Parent = Content
+
+local AntiLagCorner = Instance.new("UICorner")
+AntiLagCorner.CornerRadius = UDim.new(0, 7)
+AntiLagCorner.Parent = AntiLagFrame
+
+local AntiLagTitle = Instance.new("TextLabel")
+AntiLagTitle.Size = UDim2.new(1, -80, 0, 22)
+AntiLagTitle.Position = UDim2.fromOffset(12, 5)
+AntiLagTitle.BackgroundTransparency = 1
+AntiLagTitle.Text = "Anti Lag"
+AntiLagTitle.TextColor3 = WHITE
+AntiLagTitle.TextSize = 13
+AntiLagTitle.Font = Enum.Font.GothamMedium
+AntiLagTitle.TextXAlignment = Enum.TextXAlignment.Left
+AntiLagTitle.Parent = AntiLagFrame
+
+local AntiLagDesc = Instance.new("TextLabel")
+AntiLagDesc.Size = UDim2.new(1, -80, 0, 15)
+AntiLagDesc.Position = UDim2.fromOffset(12, 26)
+AntiLagDesc.BackgroundTransparency = 1
+AntiLagDesc.Text = "Optimasi efek & kualitas client"
+AntiLagDesc.TextColor3 = GRAY
+AntiLagDesc.TextSize = 9
+AntiLagDesc.Font = Enum.Font.Gotham
+AntiLagDesc.TextXAlignment = Enum.TextXAlignment.Left
+AntiLagDesc.Parent = AntiLagFrame
+
+local AntiLagToggle = Instance.new("TextButton")
+AntiLagToggle.Size = UDim2.fromOffset(48, 25)
+AntiLagToggle.Position = UDim2.new(1, -60, 0.5, -12)
+AntiLagToggle.BackgroundColor3 = Color3.fromRGB(55, 60, 57)
+AntiLagToggle.BorderSizePixel = 0
+AntiLagToggle.Text = ""
+AntiLagToggle.Parent = AntiLagFrame
+
+local AntiLagToggleCorner = Instance.new("UICorner")
+AntiLagToggleCorner.CornerRadius = UDim.new(1, 0)
+AntiLagToggleCorner.Parent = AntiLagToggle
+
+local AntiLagCircle = Instance.new("Frame")
+AntiLagCircle.Size = UDim2.fromOffset(19, 19)
+AntiLagCircle.Position = UDim2.fromOffset(3, 3)
+AntiLagCircle.BackgroundColor3 = WHITE
+AntiLagCircle.BorderSizePixel = 0
+AntiLagCircle.Parent = AntiLagToggle
+
+local AntiLagCircleCorner = Instance.new("UICorner")
+AntiLagCircleCorner.CornerRadius = UDim.new(1, 0)
+AntiLagCircleCorner.Parent = AntiLagCircle
+
+--========================================================--
+-- STAT BOXES
+--========================================================--
+
+local function CreateStat(position, title, value)
+
+	local Box = Instance.new("Frame")
+	Box.Size = UDim2.new(0.48, 0, 0, 58)
+	Box.Position = position
+	Box.BackgroundColor3 = PANEL2
+	Box.BorderSizePixel = 0
+	Box.Parent = Content
+
+	local Corner = Instance.new("UICorner")
+	Corner.CornerRadius = UDim.new(0, 7)
+	Corner.Parent = Box
+
+	local TitleLabel = Instance.new("TextLabel")
+	TitleLabel.Size = UDim2.new(1, -20, 0, 18)
+	TitleLabel.Position = UDim2.fromOffset(10, 7)
+	TitleLabel.BackgroundTransparency = 1
+	TitleLabel.Text = title
+	TitleLabel.TextColor3 = GRAY
+	TitleLabel.TextSize = 9
+	TitleLabel.Font = Enum.Font.GothamMedium
+	TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+	TitleLabel.Parent = Box
+
+	local ValueLabel = Instance.new("TextLabel")
+	ValueLabel.Size = UDim2.new(1, -20, 0, 27)
+	ValueLabel.Position = UDim2.fromOffset(10, 25)
+	ValueLabel.BackgroundTransparency = 1
+	ValueLabel.Text = value
+	ValueLabel.TextColor3 = GREEN
+	ValueLabel.TextSize = 18
+	ValueLabel.Font = Enum.Font.GothamBold
+	ValueLabel.TextXAlignment = Enum.TextXAlignment.Left
+	ValueLabel.Parent = Box
+
+	return ValueLabel
+end
+
+local TotalValue = CreateStat(
+	UDim2.new(0, 0, 0, 162),
+	"TOTAL CODE",
+	tostring(#Codes)
+)
+
+local RedeemedValue = CreateStat(
+	UDim2.new(0.52, 0, 0, 162),
+	"REDEEMED",
+	"0"
+)
+
+--========================================================--
+-- PROGRESS
+--========================================================--
+
+local ProgressBack = Instance.new("Frame")
+ProgressBack.Size = UDim2.new(1, 0, 0, 8)
+ProgressBack.Position = UDim2.new(0, 0, 0, 227)
+ProgressBack.BackgroundColor3 = Color3.fromRGB(42, 48, 44)
+ProgressBack.BorderSizePixel = 0
+ProgressBack.Parent = Content
+
+local ProgressCorner = Instance.new("UICorner")
+ProgressCorner.CornerRadius = UDim.new(1, 0)
+ProgressCorner.Parent = ProgressBack
+
+local Progress = Instance.new("Frame")
+Progress.Size = UDim2.new(0, 0, 1, 0)
+Progress.BackgroundColor3 = GREEN
+Progress.BorderSizePixel = 0
+Progress.Parent = ProgressBack
+
+local ProgressCorner2 = Instance.new("UICorner")
+ProgressCorner2.CornerRadius = UDim.new(1, 0)
+ProgressCorner2.Parent = Progress
+
+--========================================================--
+-- STATUS
+--========================================================--
+
+local Status = Instance.new("TextLabel")
+Status.Size = UDim2.new(1, 0, 0, 18)
+Status.Position = UDim2.new(0, 0, 0, 241)
+Status.BackgroundTransparency = 1
+Status.Text = "READY"
+Status.TextColor3 = GRAY
+Status.TextSize = 9
+Status.Font = Enum.Font.GothamMedium
+Status.TextXAlignment = Enum.TextXAlignment.Left
+Status.Parent = Content
+
+--========================================================--
+-- STATE
+--========================================================--
+
+local AutoRedeem = false
+local Redeemed = 0
+local RedeemRunning = false
+local AntiAFK = false
+local AntiAFKRunning = false
+local AntiLag = false
+
+--========================================================--
+-- UPDATE TOGGLE
+--========================================================--
+
+local function UpdateToggle()
+
+	if AutoRedeem then
+
+		Toggle.BackgroundColor3 = GREEN
+
+		TweenService:Create(
+			ToggleCircle,
+			TweenInfo.new(0.15),
+			{
+				Position = UDim2.new(1, -22, 0, 3)
+			}
+		):Play()
+
+	else
+
+		Toggle.BackgroundColor3 = Color3.fromRGB(55, 60, 57)
+
+		TweenService:Create(
+			ToggleCircle,
+			TweenInfo.new(0.15),
+			{
+				Position = UDim2.fromOffset(3, 3)
+			}
+		):Play()
+
+	end
+
+end
+
+--========================================================--
+-- FEATURE HELPERS
+--========================================================--
+
+local function SetSwitch(button, circle, enabled)
+    if enabled then
+        button.BackgroundColor3 = GREEN
+        TweenService:Create(circle, TweenInfo.new(0.15), {
+            Position = UDim2.new(1, -22, 0, 3)
+        }):Play()
+    else
+        button.BackgroundColor3 = Color3.fromRGB(55, 60, 57)
+        TweenService:Create(circle, TweenInfo.new(0.15), {
+            Position = UDim2.fromOffset(3, 3)
+        }):Play()
+    end
+end
+
+local function GetHumanoid()
+    local Character = Player.Character
+    if not Character then return nil end
+    return Character:FindFirstChildOfClass("Humanoid")
+end
+
+--========================================================--
+-- ANTI AFK / AUTO ATTACK CLICK
+-- Klik tombol Attack seperti tombol pedang pada layar
+-- setiap 60 detik agar karakter tidak dianggap idle.
+--========================================================--
+
+local ANTI_AFK_INTERVAL = 60
+
+local function ClickAttackButton()
+    local Camera = workspace.CurrentCamera
+    if not Camera then return false end
+
+    -- Coba cari tombol Attack melalui nama GUI terlebih dahulu.
+    local PlayerGui = Player:FindFirstChildOfClass("PlayerGui")
+    if PlayerGui then
+        local keywords = {
+            "attack", "basicattack", "basic_attack",
+            "normalattack", "normal_attack",
+            "serang", "pedang", "sword"
+        }
+
+        for _, obj in ipairs(PlayerGui:GetDescendants()) do
+            if obj:IsA("GuiButton") and obj.Visible then
+                local name = string.lower(obj.Name or "")
+                local match = false
+
+                for _, keyword in ipairs(keywords) do
+                    if string.find(name, keyword, 1, true) then
+                        match = true
+                        break
+                    end
+                end
+
+                if match then
+                    local fired = pcall(function()
+                        for _, connection in ipairs(getconnections(obj.Activated)) do
+                            connection:Fire()
+                        end
+                    end)
+
+                    if fired then
+                        return true
+                    end
+                end
+            end
+        end
+    end
+
+    -- Fallback untuk tombol Attack pada posisi kanan-bawah layar.
+    local viewport = Camera.ViewportSize
+    local x = viewport.X * 0.89
+    local y = viewport.Y * 0.61
+
+    local ok = pcall(function()
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, true, game, 0)
+        task.wait(0.08)
+        VirtualInputManager:SendMouseButtonEvent(x, y, 0, false, game, 0)
+    end)
+
+    return ok
+end
+
+local function StartAntiAFK()
+    if AntiAFKRunning then return end
+    AntiAFKRunning = true
+
+    task.spawn(function()
+        -- Klik pertama setelah 60 detik.
+        while AntiAFK do
+            task.wait(ANTI_AFK_INTERVAL)
+
+            if not AntiAFK then
+                break
+            end
+
+            local Character = Player.Character
+            local Humanoid = Character and Character:FindFirstChildOfClass("Humanoid")
+
+            if Humanoid and Humanoid.Health > 0 then
+                ClickAttackButton()
+            end
+        end
+
+        AntiAFKRunning = false
+    end)
+end
+
+local AntiLagConnections = {}
+
+local function DisableVisualEffect(obj)
+    pcall(function()
+        if obj:IsA("ParticleEmitter")
+            or obj:IsA("Trail")
+            or obj:IsA("Beam")
+            or obj:IsA("Smoke")
+            or obj:IsA("Fire")
+            or obj:IsA("Sparkles") then
+            obj.Enabled = false
+
+        elseif obj:IsA("PostEffect") then
+            obj.Enabled = false
+
+        elseif obj:IsA("Decal") or obj:IsA("Texture") then
+            -- Hilangkan gambar/tekstur dekoratif agar beban render lebih ringan.
+            obj.Transparency = 1
+
+        elseif obj:IsA("BasePart") then
+            -- Turunkan beban material, refleksi dan bayangan di client.
+            obj.CastShadow = false
+            obj.Reflectance = 0
+
+            if obj.Material ~= Enum.Material.SmoothPlastic
+                and obj.Material ~= Enum.Material.Plastic then
+                obj.Material = Enum.Material.SmoothPlastic
+            end
+        end
+    end)
+end
+
+local function ApplyAntiLag()
+    if not AntiLag then return end
+
+    local Lighting = game:GetService("Lighting")
+    local Terrain = workspace:FindFirstChildOfClass("Terrain")
+
+    -- Turunkan kualitas rendering/lighting.
+    pcall(function()
+        Lighting.GlobalShadows = false
+        Lighting.EnvironmentDiffuseScale = 0
+        Lighting.EnvironmentSpecularScale = 0
+        Lighting.Technology = Enum.Technology.Compatibility
+    end)
+
+    -- Matikan dekorasi Terrain bila tersedia.
+    if Terrain then
+        pcall(function()
+            Terrain.Decoration = false
+        end)
+
+        pcall(function()
+            Terrain.WaterWaveSize = 0
+            Terrain.WaterWaveSpeed = 0
+            Terrain.WaterReflectance = 0
+            Terrain.WaterTransparency = 1
+        end)
+    end
+
+    -- Turunkan Graphics Quality Roblox ke level rendah.
+    pcall(function()
+        local UserGameSettings = UserSettings():GetService("UserGameSettings")
+        UserGameSettings.GraphicsQualityLevel = 1
+    end)
+
+    -- Bersihkan semua efek visual yang sudah ada.
+    for _, obj in ipairs(workspace:GetDescendants()) do
+        if not AntiLag then break end
+        DisableVisualEffect(obj)
+    end
+
+    -- Matikan efek yang muncul setelah fitur dinyalakan.
+    if AntiLagConnections.DescendantAdded then
+        AntiLagConnections.DescendantAdded:Disconnect()
+    end
+
+    AntiLagConnections.DescendantAdded = workspace.DescendantAdded:Connect(function(obj)
+        if AntiLag then
+            task.defer(function()
+                DisableVisualEffect(obj)
+            end)
+        end
+    end)
+end
+
+local function StopAntiLag()
+    if AntiLagConnections.DescendantAdded then
+        AntiLagConnections.DescendantAdded:Disconnect()
+        AntiLagConnections.DescendantAdded = nil
+    end
+end
+
+--========================================================--
+-- REDEEM
+--========================================================--
+
+local function RedeemCode(code)
+
+	local success = pcall(function()
+
+		CodeRE:FireServer({
+			event = "usecode",
+			code = code
+		})
+
+	end)
+
+	if success then
+		Redeemed += 1
+
+		RedeemedValue.Text = tostring(Redeemed)
+
+		local percent = Redeemed / #Codes
+
+		TweenService:Create(
+			Progress,
+			TweenInfo.new(0.2),
+			{
+				Size = UDim2.new(percent, 0, 1, 0)
+			}
+		):Play()
+	end
+
+end
+
+--========================================================--
+-- AUTO REDEEM LOOP
+--========================================================--
+
+local function StartAutoRedeem()
+
+	if RedeemRunning then
+		return
+	end
+
+	RedeemRunning = true
+
+	task.spawn(function()
+
+		for index, code in ipairs(Codes) do
+
+			if not AutoRedeem then
+				break
+			end
+
+			Status.Text = "REDEEMING  •  " .. index .. "/" .. #Codes
+
+			print(
+				("[AUTO REDEEM] [%d/%d] %s")
+					:format(index, #Codes, code)
+			)
+
+			RedeemCode(code)
+
+			if index < #Codes and AutoRedeem then
+				task.wait(REDEEM_DELAY)
+			end
+
+		end
+
+		if AutoRedeem then
+			Status.Text = "FINISHED"
+		else
+			Status.Text = "STOPPED"
+		end
+
+		RedeemRunning = false
+
+	end)
+
+end
+
+--========================================================--
+-- TOGGLE
+--========================================================--
+
+Toggle.MouseButton1Click:Connect(function()
+
+	AutoRedeem = not AutoRedeem
+
+	UpdateToggle()
+
+	if AutoRedeem then
+		Status.Text = "STARTING..."
+		StartAutoRedeem()
+	else
+		Status.Text = "AUTO REDEEM OFF"
+	end
+
+end)
+
+--========================================================--
+-- ANTI AFK TOGGLE
+--========================================================--
+
+AntiAFKToggle.MouseButton1Click:Connect(function()
+    AntiAFK = not AntiAFK
+    SetSwitch(AntiAFKToggle, AntiAFKCircle, AntiAFK)
+
+    if AntiAFK then
+        StartAntiAFK()
+    end
+end)
+
+--========================================================--
+-- ANTI LAG TOGGLE
+--========================================================--
+
+AntiLagToggle.MouseButton1Click:Connect(function()
+    AntiLag = not AntiLag
+    SetSwitch(AntiLagToggle, AntiLagCircle, AntiLag)
+
+    if AntiLag then
+        Status.Text = "ANTI LAG: EFFECT OFF • GRAPHICS LOW"
+        ApplyAntiLag()
+    else
+        StopAntiLag()
+        Status.Text = "ANTI LAG OFF"
+    end
+end)
+
+--========================================================--
+-- CLOSE -> LOGO
+--========================================================--
+
+Close.MouseButton1Click:Connect(function()
+
+	Main.Visible = false
+
+	LogoButton.Visible = true
+
+end)
+
+--========================================================--
+-- LOGO -> OPEN UI
+--========================================================--
+
+LogoButton.MouseButton1Click:Connect(function()
+
+	LogoButton.Visible = false
+
+	Main.Visible = true
+
+end)
+
+print("[K5 HUB] Compact UI Loaded")
+print("[K5 HUB] Total Codes:", #Codes)
