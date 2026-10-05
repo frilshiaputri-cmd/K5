@@ -1,0 +1,36 @@
+--========================================================--
+-- K5 HUB STABLE LOADER
+-- Script ini tetap sama walaupun isi K5-HUB diperbarui.
+-- Cukup ganti isi file K5-HUB di URL raw yang sama.
+--========================================================--
+
+local K5_HUB_RAW_URL = "PASTE_RAW_URL_K5_HUB_DI_SINI"
+
+if type(K5_HUB_RAW_URL) ~= "string"
+    or K5_HUB_RAW_URL == ""
+    or K5_HUB_RAW_URL == "PASTE_RAW_URL_K5_HUB_DI_SINI" then
+    warn("[K5 HUB Loader] RAW URL belum diatur.")
+    return
+end
+
+local ok, source = pcall(function()
+    return game:HttpGet(K5_HUB_RAW_URL)
+end)
+
+if not ok then
+    warn("[K5 HUB Loader] Gagal mengambil K5-HUB:", source)
+    return
+end
+
+local compileOk, chunk = pcall(loadstring, source)
+
+if not compileOk or type(chunk) ~= "function" then
+    warn("[K5 HUB Loader] Gagal memuat script K5-HUB:", chunk)
+    return
+end
+
+local runOk, err = pcall(chunk)
+
+if not runOk then
+    warn("[K5 HUB Loader] Error saat menjalankan K5-HUB:", err)
+end
