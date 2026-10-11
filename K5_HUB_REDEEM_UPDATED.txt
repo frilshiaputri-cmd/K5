@@ -11,11 +11,15 @@ local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local Player = Players.LocalPlayer
 
-local CodeRE = ReplicatedStorage
-	.Framework
-	.Systems
-	.CodesSystem
-	.CodeRE
+-- Ambil RemoteEvent dengan aman agar UI tetap bisa dibuat
+-- meskipun struktur remote game berubah atau belum tersedia.
+local CodeRE
+do
+	local framework = ReplicatedStorage:FindFirstChild("Framework")
+	local systems = framework and framework:FindFirstChild("Systems")
+	local codesSystem = systems and systems:FindFirstChild("CodesSystem")
+	CodeRE = codesSystem and codesSystem:FindFirstChild("CodeRE")
+end
 
 --========================================================--
 -- SETTINGS
@@ -886,12 +890,12 @@ end
 local function RedeemCode(code)
 
 	local success = pcall(function()
-
+		assert(CodeRE and CodeRE:IsA("RemoteEvent"),
+			"CodeRE tidak ditemukan di ReplicatedStorage.Framework.Systems.CodesSystem")
 		CodeRE:FireServer({
 			event = "usecode",
 			code = code
 		})
-
 	end)
 
 	if success then
