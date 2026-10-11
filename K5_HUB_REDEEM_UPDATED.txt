@@ -150,6 +150,11 @@ local Codes = {
 	"TRADEISLANDUPDATE",
 	"North",
 	"NEXCU"
+    "EvLCrys",
+    "Joy_Blox",
+    "DEYMMM",
+    "DD_Noir",
+    "Maple_13xNoir"
 }
 
 --========================================================--
