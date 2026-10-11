@@ -156,7 +156,7 @@ local Codes = {
 	"S4ENDLESSTOWER",
 	"TRADEISLANDUPDATE",
 	"North",
-	"NEXCU"
+	"NEXCU",
     "EvLCrys",
     "Joy_Blox",
     "DEYMMM",
