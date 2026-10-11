@@ -10,6 +10,9 @@ local RunService = game:GetService("RunService")
 local VirtualInputManager = game:GetService("VirtualInputManager")
 
 local Player = Players.LocalPlayer
+if not Player then
+    error("[K5-HUB] LocalPlayer tidak tersedia. Jalankan script dari client/game.")
+end
 
 -- Ambil RemoteEvent dengan aman agar UI tetap bisa dibuat
 -- meskipun struktur remote game berubah atau belum tersedia.
@@ -179,12 +182,20 @@ local GRAY = Color3.fromRGB(145, 155, 150)
 -- GUI
 --========================================================--
 
+local PlayerGui = Player:WaitForChild("PlayerGui")
+
+-- Hapus UI lama jika script dijalankan ulang agar tidak menumpuk.
+local oldGui = PlayerGui:FindFirstChild("K5HubCompact")
+if oldGui then
+    oldGui:Destroy()
+end
+
 local Gui = Instance.new("ScreenGui")
 Gui.Name = "K5HubCompact"
 Gui.ResetOnSpawn = false
 Gui.IgnoreGuiInset = true
 Gui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
-Gui.Parent = Player:WaitForChild("PlayerGui")
+Gui.Parent = PlayerGui
 
 --========================================================--
 -- DRAG FUNCTION
