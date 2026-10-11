@@ -1,19 +1,23 @@
--- K5 HUB Loader
--- URL tetap; update cukup dilakukan pada file utama di GitHub.
+--[[
+    K5-HUB Loader
+    File sumber: K5_HUB_REDEEM_UPDATED.txt
+    Update isi file sumber di branch main; loader ini tidak perlu diubah
+    selama nama file dan lokasinya tetap sama.
+]]
 
-local URL = "https://raw.githubusercontent.com/frilshiaputri-cmd/K5/refs/heads/main/K5_HUB_AntiLag_Max_LogoUpdated_NEW_CODES.txt"
+local SCRIPT_URL = "https://raw.githubusercontent.com/frilshiaputri-cmd/K5/refs/heads/main/K5_HUB_REDEEM_UPDATED.txt"
 
-local success, err = pcall(function()
-    local source = game:HttpGet(URL)
-    local script = loadstring(source)
+local ok, err = pcall(function()
+    local source = game:HttpGet(SCRIPT_URL)
+    assert(type(source) == "string" and #source > 0,
+        "File script kosong atau gagal diunduh.")
 
-    if not script then
-        error("Gagal meng-compile script K5 HUB")
-    end
+    local compiled, compileError = loadstring(source)
+    assert(compiled, "Script Lua tidak valid: " .. tostring(compileError))
 
-    script()
+    compiled()
 end)
 
-if not success then
-    warn("[K5 HUB Loader] Gagal memuat script: " .. tostring(err))
+if not ok then
+    warn("[K5-HUB Loader] " .. tostring(err))
 end
