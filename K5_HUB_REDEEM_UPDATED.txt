@@ -144,7 +144,12 @@ local Codes = {
 	"BaraWell",
 	"Horrortoki",
 	"Vinxies",
-	"minamee"
+	"minamee",
+	"IRONSOULWEEKEND27",
+	"S4ENDLESSTOWER",
+	"TRADEISLANDUPDATE",
+	"North",
+	"NEXCU"
 }
 
 --========================================================--
