@@ -161,7 +161,9 @@ local Codes = {
     "Joy_Blox",
     "DEYMMM",
     "DD_Noir",
-    "Maple_13xNoir"
+    "Maple_13xNoir",
+	"IRONSOULWEEKEND28",
+	"BOWANDSKILLTREE"
 }
 
 --========================================================--
